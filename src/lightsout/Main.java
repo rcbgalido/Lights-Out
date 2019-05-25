@@ -1,0 +1,655 @@
+package lightsout;
+
+import java.util.Random;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JOptionPane;
+
+/**
+ *
+ * @author rcbgalido
+ */
+public class Main extends javax.swing.JFrame {
+
+    private boolean gridLock;
+    private static final int ROWS = 5;
+    private static final int COLUMNS = 5;
+    private static final int GRID_MAIN_TO_GRID_BACKUP = 1;
+    private static final int GRID_BACKUP_TO_GRID_MAIN = 2;
+    
+    private final boolean gridMain[][];
+    private final boolean gridBackup[][]; // grid for "Reset" implementation
+    private final ImageIcon tileLighted;
+    private final ImageIcon tileUnlighted;
+    private final JButton gridButtons[][];
+    
+    private ImageIcon titleImage;
+    
+    public Main() {
+        initComponents();
+        setLocationRelativeTo(null); // position frame in the center of the screen
+        
+        gridMain = new boolean[ROWS][COLUMNS]; // grid is composed of 5 x 5 tiles
+        gridBackup = new boolean[ROWS][COLUMNS];
+        
+        tileLighted = new ImageIcon(getClass().getResource("resources/02_tile_lighted.jpg"));
+        tileUnlighted = new ImageIcon(getClass().getResource("resources/03_tile_unlighted.jpg"));
+        
+        gridButtons = new JButton[][]{
+            {oneBTN, twoBTN, threeBTN, fourBTN, fiveBTN},
+            {sixBTN, sevenBTN, eightBTN, nineBTN, tenBTN},
+            {elevenBTN, twelveBTN, thirteenBTN, fourteenBTN, fifteenBTN},
+            {sixteenBTN, seventeenBTN, eighteenBTN, nineteenBTN, twentyBTN},
+            {twentyoneBTN, twentytwoBTN, twentythreeBTN, twentyfourBTN, twentyfiveBTN}
+        };
+        
+        randomBTNActionPerformed(null); // simulate pressing of random button on load (a puzzle is started)
+        
+    }
+
+    private void onTileClick(int tileNumber) {
+        
+        if (!gridLock) { // if grid is not locked
+            
+            resetBTN.setEnabled(true);
+            
+            // determining grid row number and grid column number based on tile number
+            int tileRow = (tileNumber - 1) / COLUMNS;
+            int tileColumn = (tileNumber - 1) % COLUMNS;
+            
+            // toogle selected tile 
+            gridMain[tileRow][tileColumn] = !gridMain[tileRow][tileColumn];
+
+            // toogle tile up of selected tile
+            if (tileRow - 1 >= 0) {
+                gridMain[tileRow - 1][tileColumn] = !gridMain[tileRow - 1][tileColumn];
+            }
+            
+            // toogle tile down of selected tile
+            if (tileRow + 1 <= ROWS - 1) {
+                gridMain[tileRow + 1][tileColumn] = !gridMain[tileRow + 1][tileColumn];
+            }
+
+            // toogle tile left of selected tile
+            if (tileColumn - 1 >= 0) {
+                gridMain[tileRow][tileColumn - 1] = !gridMain[tileRow][tileColumn - 1];
+            }
+
+            // toogle tile right of selected tile
+            if (tileColumn + 1 <= COLUMNS - 1) {
+                gridMain[tileRow][tileColumn + 1] = !gridMain[tileRow][tileColumn + 1];
+            }
+
+            setGridTileImages();
+            
+            if (isPuzzleSolved()) {
+                JOptionPane.showMessageDialog(null, "Congratulations! You solved the puzzle.", "Message", JOptionPane.INFORMATION_MESSAGE);
+                gridLock = true;
+            }
+            
+        }
+    }
+    
+    private void setGridTileImages() { // set grid tile images (light or unlighted)
+        for (int a = 0; a < ROWS; a++) {
+            for (int b = 0; b < COLUMNS; b++) {
+                gridButtons[a][b].setIcon((gridMain[a][b]) ? tileLighted : tileUnlighted);
+            }
+        }
+    }
+    
+    private boolean isPuzzleSolved() {
+        for (int a = 0; a < ROWS; a++) {
+            for (int b = 0; b < COLUMNS; b++) {
+                if (gridMain[a][b]) { // there is still a lighted tile (not solved)
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    private void randomizeGrid() {
+        Random r = new Random();
+        for (int a = 0; a < ROWS; a++) {
+            for (int b = 0; b < COLUMNS; b++) {
+                gridMain[a][b] = r.nextInt(2) == 0;
+            }
+        }
+        setGridTileImages();
+    }
+
+    private void copyGrid(int scenario) {
+        if (scenario == GRID_MAIN_TO_GRID_BACKUP) {
+            for (int a = 0; a < ROWS; a++) {
+                System.arraycopy(gridMain[a], 0, gridBackup[a], 0, COLUMNS);
+            }
+        } else if (scenario == GRID_BACKUP_TO_GRID_MAIN) {
+            for (int a = 0; a < ROWS; a++) {
+                System.arraycopy(gridBackup[a], 0, gridMain[a], 0, COLUMNS);
+            }
+            setGridTileImages();
+        }
+        
+        gridLock = false;
+        resetBTN.setEnabled(false);
+    }
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        jPanel1 = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel();
+        oneBTN = new javax.swing.JButton();
+        twoBTN = new javax.swing.JButton();
+        threeBTN = new javax.swing.JButton();
+        fourBTN = new javax.swing.JButton();
+        fiveBTN = new javax.swing.JButton();
+        sixBTN = new javax.swing.JButton();
+        sevenBTN = new javax.swing.JButton();
+        eightBTN = new javax.swing.JButton();
+        nineBTN = new javax.swing.JButton();
+        tenBTN = new javax.swing.JButton();
+        elevenBTN = new javax.swing.JButton();
+        twelveBTN = new javax.swing.JButton();
+        thirteenBTN = new javax.swing.JButton();
+        fourteenBTN = new javax.swing.JButton();
+        fifteenBTN = new javax.swing.JButton();
+        sixteenBTN = new javax.swing.JButton();
+        seventeenBTN = new javax.swing.JButton();
+        eighteenBTN = new javax.swing.JButton();
+        nineteenBTN = new javax.swing.JButton();
+        twentyBTN = new javax.swing.JButton();
+        twentyoneBTN = new javax.swing.JButton();
+        twentytwoBTN = new javax.swing.JButton();
+        twentythreeBTN = new javax.swing.JButton();
+        twentyfourBTN = new javax.swing.JButton();
+        twentyfiveBTN = new javax.swing.JButton();
+        titleImage=new ImageIcon(getClass().getResource("resources/01_title.png"));
+        jLabel1 = new javax.swing.JLabel(titleImage);
+        randomBTN = new javax.swing.JButton();
+        resetBTN = new javax.swing.JButton();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Lights Out!");
+        setResizable(false);
+
+        jPanel1.setBackground(new java.awt.Color(91, 125, 135));
+        jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(46, 50, 60), 10));
+
+        jPanel2.setBackground(new java.awt.Color(40, 40, 40));
+        jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(91, 125, 135)));
+        jPanel2.setLayout(new java.awt.GridLayout(5, 5));
+
+        oneBTN.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        oneBTN.setFocusable(false);
+        oneBTN.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                oneBTNActionPerformed(evt);
+            }
+        });
+        jPanel2.add(oneBTN);
+
+        twoBTN.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        twoBTN.setFocusable(false);
+        twoBTN.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                twoBTNActionPerformed(evt);
+            }
+        });
+        jPanel2.add(twoBTN);
+
+        threeBTN.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        threeBTN.setFocusable(false);
+        threeBTN.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                threeBTNActionPerformed(evt);
+            }
+        });
+        jPanel2.add(threeBTN);
+
+        fourBTN.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        fourBTN.setFocusable(false);
+        fourBTN.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                fourBTNActionPerformed(evt);
+            }
+        });
+        jPanel2.add(fourBTN);
+
+        fiveBTN.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        fiveBTN.setFocusable(false);
+        fiveBTN.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                fiveBTNActionPerformed(evt);
+            }
+        });
+        jPanel2.add(fiveBTN);
+
+        sixBTN.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        sixBTN.setFocusable(false);
+        sixBTN.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sixBTNActionPerformed(evt);
+            }
+        });
+        jPanel2.add(sixBTN);
+
+        sevenBTN.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        sevenBTN.setFocusable(false);
+        sevenBTN.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sevenBTNActionPerformed(evt);
+            }
+        });
+        jPanel2.add(sevenBTN);
+
+        eightBTN.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        eightBTN.setFocusable(false);
+        eightBTN.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                eightBTNActionPerformed(evt);
+            }
+        });
+        jPanel2.add(eightBTN);
+
+        nineBTN.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        nineBTN.setFocusable(false);
+        nineBTN.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                nineBTNActionPerformed(evt);
+            }
+        });
+        jPanel2.add(nineBTN);
+
+        tenBTN.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        tenBTN.setFocusable(false);
+        tenBTN.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tenBTNActionPerformed(evt);
+            }
+        });
+        jPanel2.add(tenBTN);
+
+        elevenBTN.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        elevenBTN.setFocusable(false);
+        elevenBTN.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                elevenBTNActionPerformed(evt);
+            }
+        });
+        jPanel2.add(elevenBTN);
+
+        twelveBTN.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        twelveBTN.setFocusable(false);
+        twelveBTN.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                twelveBTNActionPerformed(evt);
+            }
+        });
+        jPanel2.add(twelveBTN);
+
+        thirteenBTN.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        thirteenBTN.setFocusable(false);
+        thirteenBTN.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                thirteenBTNActionPerformed(evt);
+            }
+        });
+        jPanel2.add(thirteenBTN);
+
+        fourteenBTN.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        fourteenBTN.setFocusable(false);
+        fourteenBTN.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                fourteenBTNActionPerformed(evt);
+            }
+        });
+        jPanel2.add(fourteenBTN);
+
+        fifteenBTN.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        fifteenBTN.setFocusable(false);
+        fifteenBTN.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                fifteenBTNActionPerformed(evt);
+            }
+        });
+        jPanel2.add(fifteenBTN);
+
+        sixteenBTN.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        sixteenBTN.setFocusable(false);
+        sixteenBTN.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sixteenBTNActionPerformed(evt);
+            }
+        });
+        jPanel2.add(sixteenBTN);
+
+        seventeenBTN.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        seventeenBTN.setFocusable(false);
+        seventeenBTN.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                seventeenBTNActionPerformed(evt);
+            }
+        });
+        jPanel2.add(seventeenBTN);
+
+        eighteenBTN.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        eighteenBTN.setFocusable(false);
+        eighteenBTN.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                eighteenBTNActionPerformed(evt);
+            }
+        });
+        jPanel2.add(eighteenBTN);
+
+        nineteenBTN.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        nineteenBTN.setFocusable(false);
+        nineteenBTN.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                nineteenBTNActionPerformed(evt);
+            }
+        });
+        jPanel2.add(nineteenBTN);
+
+        twentyBTN.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        twentyBTN.setFocusable(false);
+        twentyBTN.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                twentyBTNActionPerformed(evt);
+            }
+        });
+        jPanel2.add(twentyBTN);
+
+        twentyoneBTN.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        twentyoneBTN.setFocusable(false);
+        twentyoneBTN.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                twentyoneBTNActionPerformed(evt);
+            }
+        });
+        jPanel2.add(twentyoneBTN);
+
+        twentytwoBTN.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        twentytwoBTN.setFocusable(false);
+        twentytwoBTN.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                twentytwoBTNActionPerformed(evt);
+            }
+        });
+        jPanel2.add(twentytwoBTN);
+
+        twentythreeBTN.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        twentythreeBTN.setFocusable(false);
+        twentythreeBTN.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                twentythreeBTNActionPerformed(evt);
+            }
+        });
+        jPanel2.add(twentythreeBTN);
+
+        twentyfourBTN.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        twentyfourBTN.setFocusable(false);
+        twentyfourBTN.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                twentyfourBTNActionPerformed(evt);
+            }
+        });
+        jPanel2.add(twentyfourBTN);
+
+        twentyfiveBTN.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        twentyfiveBTN.setFocusable(false);
+        twentyfiveBTN.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                twentyfiveBTNActionPerformed(evt);
+            }
+        });
+        jPanel2.add(twentyfiveBTN);
+
+        randomBTN.setFont(new java.awt.Font("Arial Unicode MS", 0, 11)); // NOI18N
+        randomBTN.setText("Random");
+        randomBTN.setFocusable(false);
+        randomBTN.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                randomBTNActionPerformed(evt);
+            }
+        });
+
+        resetBTN.setFont(new java.awt.Font("Arial Unicode MS", 0, 11)); // NOI18N
+        resetBTN.setText("Reset");
+        resetBTN.setEnabled(false);
+        resetBTN.setFocusable(false);
+        resetBTN.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                resetBTNActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(randomBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(resetBTN, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 323, Short.MAX_VALUE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(20, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(20, 20, 20)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 302, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(20, 20, 20)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(randomBTN)
+                    .addComponent(resetBTN))
+                .addContainerGap(20, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
+
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void randomBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_randomBTNActionPerformed
+        randomizeGrid();
+        copyGrid(GRID_MAIN_TO_GRID_BACKUP);
+    }//GEN-LAST:event_randomBTNActionPerformed
+
+    private void resetBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetBTNActionPerformed
+        copyGrid(GRID_BACKUP_TO_GRID_MAIN);
+    }//GEN-LAST:event_resetBTNActionPerformed
+
+    private void oneBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_oneBTNActionPerformed
+        onTileClick(1);
+    }//GEN-LAST:event_oneBTNActionPerformed
+
+    private void nineBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nineBTNActionPerformed
+        onTileClick(9);
+    }//GEN-LAST:event_nineBTNActionPerformed
+
+    private void twoBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_twoBTNActionPerformed
+        onTileClick(2);
+    }//GEN-LAST:event_twoBTNActionPerformed
+
+    private void threeBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_threeBTNActionPerformed
+        onTileClick(3);
+    }//GEN-LAST:event_threeBTNActionPerformed
+
+    private void fourBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fourBTNActionPerformed
+        onTileClick(4);
+    }//GEN-LAST:event_fourBTNActionPerformed
+
+    private void fiveBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fiveBTNActionPerformed
+        onTileClick(5);
+    }//GEN-LAST:event_fiveBTNActionPerformed
+
+    private void sixBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sixBTNActionPerformed
+        onTileClick(6);
+    }//GEN-LAST:event_sixBTNActionPerformed
+
+    private void sevenBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sevenBTNActionPerformed
+        onTileClick(7);
+    }//GEN-LAST:event_sevenBTNActionPerformed
+
+    private void eightBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_eightBTNActionPerformed
+        onTileClick(8);
+    }//GEN-LAST:event_eightBTNActionPerformed
+
+    private void tenBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tenBTNActionPerformed
+        onTileClick(10);
+    }//GEN-LAST:event_tenBTNActionPerformed
+
+    private void elevenBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_elevenBTNActionPerformed
+        onTileClick(11);
+    }//GEN-LAST:event_elevenBTNActionPerformed
+
+    private void twelveBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_twelveBTNActionPerformed
+        onTileClick(12);
+    }//GEN-LAST:event_twelveBTNActionPerformed
+
+    private void thirteenBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_thirteenBTNActionPerformed
+        onTileClick(13);
+    }//GEN-LAST:event_thirteenBTNActionPerformed
+
+    private void fourteenBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fourteenBTNActionPerformed
+        onTileClick(14);
+    }//GEN-LAST:event_fourteenBTNActionPerformed
+
+    private void fifteenBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fifteenBTNActionPerformed
+        onTileClick(15);
+    }//GEN-LAST:event_fifteenBTNActionPerformed
+
+    private void sixteenBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sixteenBTNActionPerformed
+        onTileClick(16);
+    }//GEN-LAST:event_sixteenBTNActionPerformed
+
+    private void seventeenBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_seventeenBTNActionPerformed
+        onTileClick(17);
+    }//GEN-LAST:event_seventeenBTNActionPerformed
+
+    private void eighteenBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_eighteenBTNActionPerformed
+        onTileClick(18);
+    }//GEN-LAST:event_eighteenBTNActionPerformed
+
+    private void nineteenBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nineteenBTNActionPerformed
+        onTileClick(19);
+    }//GEN-LAST:event_nineteenBTNActionPerformed
+
+    private void twentyBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_twentyBTNActionPerformed
+        onTileClick(20);
+    }//GEN-LAST:event_twentyBTNActionPerformed
+
+    private void twentyoneBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_twentyoneBTNActionPerformed
+        onTileClick(21);
+    }//GEN-LAST:event_twentyoneBTNActionPerformed
+
+    private void twentytwoBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_twentytwoBTNActionPerformed
+        onTileClick(22);
+    }//GEN-LAST:event_twentytwoBTNActionPerformed
+
+    private void twentythreeBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_twentythreeBTNActionPerformed
+        onTileClick(23);
+    }//GEN-LAST:event_twentythreeBTNActionPerformed
+
+    private void twentyfourBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_twentyfourBTNActionPerformed
+        onTileClick(24);
+    }//GEN-LAST:event_twentyfourBTNActionPerformed
+
+    private void twentyfiveBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_twentyfiveBTNActionPerformed
+        onTileClick(25);
+    }//GEN-LAST:event_twentyfiveBTNActionPerformed
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(Main.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(Main.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(Main.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(Main.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new Main().setVisible(true);
+            }
+        });
+    }
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton eightBTN;
+    private javax.swing.JButton eighteenBTN;
+    private javax.swing.JButton elevenBTN;
+    private javax.swing.JButton fifteenBTN;
+    private javax.swing.JButton fiveBTN;
+    private javax.swing.JButton fourBTN;
+    private javax.swing.JButton fourteenBTN;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JButton nineBTN;
+    private javax.swing.JButton nineteenBTN;
+    private javax.swing.JButton oneBTN;
+    private javax.swing.JButton randomBTN;
+    private javax.swing.JButton resetBTN;
+    private javax.swing.JButton sevenBTN;
+    private javax.swing.JButton seventeenBTN;
+    private javax.swing.JButton sixBTN;
+    private javax.swing.JButton sixteenBTN;
+    private javax.swing.JButton tenBTN;
+    private javax.swing.JButton thirteenBTN;
+    private javax.swing.JButton threeBTN;
+    private javax.swing.JButton twelveBTN;
+    private javax.swing.JButton twentyBTN;
+    private javax.swing.JButton twentyfiveBTN;
+    private javax.swing.JButton twentyfourBTN;
+    private javax.swing.JButton twentyoneBTN;
+    private javax.swing.JButton twentythreeBTN;
+    private javax.swing.JButton twentytwoBTN;
+    private javax.swing.JButton twoBTN;
+    // End of variables declaration//GEN-END:variables
+}
